@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import LensAlert from './LensAlert.jsx'
 import './find.css'
 
 // Find, in the lens: who this seeker seeks ("find Kunal"), how far, and which way. Ported from influence's Find.jsx,
@@ -15,6 +16,7 @@ const FRESH_MS = 5000
 export default function Find({ onBack }) {
   const [target, setTarget] = useState(undefined) // undefined while loading, null when nobody is sought
   const [offline, setOffline] = useState(false)
+  const [alert, setAlert] = useState(null) // the seeker's latest distance alert while it is under 8 s old
   const [, tick] = useState(0)
   const turn = useRef(0)
   const back = useRef(null)
@@ -27,7 +29,7 @@ export default function Find({ onBack }) {
       try {
         const res = await fetch(`${API}/api/target?seeker=${encodeURIComponent(SEEKER)}`, { cache: 'no-store' })
         const t = await res.json()
-        if (alive) (setTarget(t && t.name ? t : null), setOffline(false))
+        if (alive) (setTarget(t && t.name ? t : null), setAlert(t?.alert || null), setOffline(false))
       } catch {
         if (alive) setOffline(true)
       }
@@ -74,6 +76,7 @@ export default function Find({ onBack }) {
       <button ref={back} className="pill ghost" onClick={onBack}>
         Back
       </button>
+      <LensAlert alert={alert} seeker={SEEKER} />
     </section>
   )
 }

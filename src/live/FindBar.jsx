@@ -39,7 +39,7 @@ function useTurn(angle) {
   return acc.current
 }
 
-export default function FindBar({ state, me, mySeeker }) {
+export default function FindBar({ state, me, mySeeker, children }) {
   const [listening, setListening] = useState(false)
   const [heard, setHeard] = useState('')
   const [typed, setTyped] = useState('')
@@ -159,6 +159,7 @@ export default function FindBar({ state, me, mySeeker }) {
           </button>
         )}
       </div>
+      {children}
     </section>
   )
 }
