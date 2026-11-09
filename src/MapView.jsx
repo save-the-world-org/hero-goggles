@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import footprint from './live/venue/salt-palace-footprint.json'
 import { SEEKER } from './Find.jsx'
+import LensAlert from './LensAlert.jsx'
 import './map.css'
 
 // Map, in the lens: the Salt Palace's outline, this seeker, the hero they seek and the other beacons, drawn to scale
@@ -28,6 +29,7 @@ const fresh = (r) => r && Date.now() - Date.parse(r.at) <= FRESH_MS
 export default function MapView({ onBack }) {
   const [state, setState] = useState(null)
   const [offline, setOffline] = useState(false)
+  const [alert, setAlert] = useState(null)
   const back = useRef(null)
   useLayoutEffect(() => back.current?.focus(), [])
 
@@ -43,6 +45,25 @@ export default function MapView({ onBack }) {
         if (alive) setOffline(true)
       }
       if (alive) timer = setTimeout(poll, 1500)
+    }
+    poll()
+    return () => ((alive = false), clearTimeout(timer))
+  }, [])
+
+  // Distance alerts ride on the target, which the state does not carry: one small request a second, only while Map is
+  // open. It fails quietly, and an API without alerts shows nothing.
+  useEffect(() => {
+    let alive = true
+    let timer
+    const poll = async () => {
+      try {
+        const res = await fetch(`${API}/api/target?seeker=${encodeURIComponent(SEEKER)}`, { cache: 'no-store' })
+        const t = await res.json()
+        if (alive) setAlert(t?.alert || null)
+      } catch {
+        /* no link: the state poll says Offline */
+      }
+      if (alive) timer = setTimeout(poll, 1000)
     }
     poll()
     return () => ((alive = false), clearTimeout(timer))
@@ -126,6 +147,7 @@ export default function MapView({ onBack }) {
       <button ref={back} className="pill ghost" onClick={onBack}>
         Back
       </button>
+      <LensAlert alert={alert} seeker={SEEKER} />
     </section>
   )
 }

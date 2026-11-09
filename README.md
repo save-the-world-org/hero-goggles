@@ -49,6 +49,17 @@ The cape changes colour with every release: `vite.config.js` picks it from `CAPE
 build, puts it on `dist/brand/hero-goggles-color.svg` (the splash, About and the tabs) and in the manifest's
 `theme_color`, which Meta uses to tint the launcher icon (a one-colour mask, on a Darkshift Dark gradient).
 
+## Distance alerts and integrations
+
+influence-api raises an alert when a seeker crosses 50, 30, 20, 10 or 5 ft of their hero, finds them (3 ft), or loses
+them. `/live/` shows this page's seeker's alerts as a banner across the top for 4 s and keeps the last ten in the find
+bar's Alerts list (`/api/alerts`, then the stream's `event: alert`); the lens shows the `alert` on `/api/target` as a
+band over Find and Map for 3 s. Each alert shows once. `/live/`'s Integrations panel reads `/api/integrations` every
+5 s (Skyhook Radar, Dash0, Elasticsearch with Search KubeCon, Gitar, Alerts). While the API has none of these, nothing
+shows and nothing fails.
+
+In `npm run dev`, add `?demoAlert=1` to either page for a made-up alert every 5 s; the build leaves it out.
+
 ## Test Find without the phone
 
 `scripts/fake-reading.sh <seeker> [distance] [azimuth]` points that seeker at Kelsey and posts a reading each second for

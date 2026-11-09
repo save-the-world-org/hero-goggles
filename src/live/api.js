@@ -58,6 +58,16 @@ export async function mcpTool(name, args = {}) {
   return out.result
 }
 
+// Distance alerts: the stream's `event: alert` goes to whoever listens here (the map page's banner and list).
+const alertListeners = new Set()
+export const onAlert = (fn) => (alertListeners.add(fn), () => alertListeners.delete(fn))
+export const emitAlert = (a) => alertListeners.forEach((fn) => fn(a))
+// A seeker's latest alerts, newest first. An API without alerts answers 404; callers treat that as none.
+export const listAlerts = async (seeker = getSeekerId(), limit = 20) => {
+  const r = await api(`/api/alerts?seeker=${encodeURIComponent(seeker)}&limit=${limit}`)
+  return Array.isArray(r) ? r : Array.isArray(r?.alerts) ? r.alerts : []
+}
+
 // The whole snapshot, live: one GET for the first paint, then Server-Sent Events (`event: state`) on every change.
 // EventSource reconnects by itself (the server asks for a 2 s retry).
 export function useLiveState() {
@@ -78,6 +88,15 @@ export function useLiveState() {
       } catch {
         /* a torn frame: the next one replaces it */
       }
+    })
+    es.addEventListener('alert', (e) => {
+      let a = null
+      try {
+        a = JSON.parse(e.data)
+      } catch {
+        return /* a torn frame */
+      }
+      if (a?.id) emitAlert(a)
     })
     es.onerror = () => setLive(false)
     return () => {

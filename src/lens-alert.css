@@ -1,0 +1,58 @@
+/* A distance alert in the lens: a black band across the card (it hides what is under it), its edges and a pulse in
+   the alert's colour, the words light. Sized for 600 x 600. */
+.screen.find, .screen.map { position: relative; }
+.lens-alert {
+  --tone: var(--green);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(2 * var(--u));
+  padding: calc(6 * var(--u)) calc(4 * var(--u));
+  background: #000;
+  border-top: calc(0.8 * var(--u)) solid var(--tone);
+  border-bottom: calc(0.8 * var(--u)) solid var(--tone);
+  text-align: center;
+  pointer-events: none;
+  overflow: hidden;
+  animation: lens-alert-in 220ms ease-out;
+}
+.lens-alert::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--tone);
+  opacity: 0;
+  animation: lens-alert-pulse 1s ease-out 3;
+}
+.lens-alert.found { --tone: #6dffa8; }
+.lens-alert.farther { --tone: #ffb020; }
+.lens-alert.lost { --tone: var(--red); }
+.lens-alert-big {
+  position: relative;
+  font-family: 'Syncopate', sans-serif;
+  font-weight: 700;
+  font-size: calc(14 * var(--u));
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--tone);
+  white-space: nowrap;
+}
+.lens-alert.closer .lens-alert-big { color: var(--light); }
+.lens-alert-name {
+  position: relative;
+  max-width: 100%;
+  font-size: calc(6.5 * var(--u));
+  font-weight: 700;
+  color: var(--light);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@keyframes lens-alert-in { from { opacity: 0; transform: translateY(-50%) scaleY(0.6); } }
+@keyframes lens-alert-pulse { 0% { opacity: 0.38; } 100% { opacity: 0; } }
