@@ -12,22 +12,28 @@ const SEEKER_FALLBACK = import.meta.env.VITE_SEEKER || 'phone'
 export const SEEKER = new URLSearchParams(location.search).get('seeker') || SEEKER_FALLBACK
 // A reading older than this is no signal.
 const FRESH_MS = 5000
+// The mirror hides Back but keeps its room, so the screen lays out as it does on the glasses.
+export const HIDDEN = { visibility: 'hidden' }
 
-export default function Find({ onBack }) {
+// mirror: /live/'s Lens draws this same screen for the page's seeker: no focus taken, the Back button kept in its place but
+// hidden, nothing else changed.
+export default function Find({ onBack, seeker = SEEKER, mirror = false }) {
   const [target, setTarget] = useState(undefined) // undefined while loading, null when nobody is sought
   const [offline, setOffline] = useState(false)
   const [alert, setAlert] = useState(null) // the seeker's latest distance alert while it is under 8 s old
   const [, tick] = useState(0)
   const turn = useRef(0)
   const back = useRef(null)
-  useLayoutEffect(() => back.current?.focus(), [])
+  useLayoutEffect(() => {
+    if (!mirror) back.current?.focus()
+  }, [])
 
   useEffect(() => {
     let alive = true
     let timer
     const poll = async () => {
       try {
-        const res = await fetch(`${API}/api/target?seeker=${encodeURIComponent(SEEKER)}`, { cache: 'no-store' })
+        const res = await fetch(`${API}/api/target?seeker=${encodeURIComponent(seeker)}`, { cache: 'no-store' })
         const t = await res.json()
         if (alive) (setTarget(t && t.name ? t : null), setAlert(t?.alert || null), setOffline(false))
       } catch {
@@ -37,7 +43,7 @@ export default function Find({ onBack }) {
     }
     poll()
     return () => ((alive = false), clearTimeout(timer))
-  }, [])
+  }, [seeker])
 
   // Only this seeker's reading (the API gives the seeker's own as lastReading), and only while it is fresh.
   const last = target?.lastReading
@@ -71,12 +77,12 @@ export default function Find({ onBack }) {
             )}
           </>
         )}
-        <p className="muted find-seeker">Seeker {SEEKER}</p>
+        <p className="muted find-seeker">Seeker {seeker}</p>
       </div>
-      <button ref={back} className="pill ghost" onClick={onBack}>
+      <button ref={back} className="pill ghost" onClick={onBack} style={mirror ? HIDDEN : undefined} aria-hidden={mirror || undefined}>
         Back
       </button>
-      <LensAlert alert={alert} seeker={SEEKER} />
+      <LensAlert alert={alert} seeker={seeker} />
     </section>
   )
 }

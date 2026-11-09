@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import footprint from './live/venue/salt-palace-footprint.json'
-import { SEEKER } from './Find.jsx'
+import { HIDDEN, SEEKER } from './Find.jsx'
 import LensAlert from './LensAlert.jsx'
 import './map.css'
 
@@ -26,12 +26,15 @@ function metres(centre, p) {
 
 const fresh = (r) => r && Date.now() - Date.parse(r.at) <= FRESH_MS
 
-export default function MapView({ onBack }) {
+// mirror: as in Find, /live/'s Lens draws this screen for the page's seeker, without focus and with Back hidden.
+export default function MapView({ onBack, seeker = SEEKER, mirror = false }) {
   const [state, setState] = useState(null)
   const [offline, setOffline] = useState(false)
   const [alert, setAlert] = useState(null)
   const back = useRef(null)
-  useLayoutEffect(() => back.current?.focus(), [])
+  useLayoutEffect(() => {
+    if (!mirror) back.current?.focus()
+  }, [])
 
   useEffect(() => {
     let alive = true
@@ -57,7 +60,7 @@ export default function MapView({ onBack }) {
     let timer
     const poll = async () => {
       try {
-        const res = await fetch(`${API}/api/target?seeker=${encodeURIComponent(SEEKER)}`, { cache: 'no-store' })
+        const res = await fetch(`${API}/api/target?seeker=${encodeURIComponent(seeker)}`, { cache: 'no-store' })
         const t = await res.json()
         if (alive) setAlert(t?.alert || null)
       } catch {
@@ -67,10 +70,10 @@ export default function MapView({ onBack }) {
     }
     poll()
     return () => ((alive = false), clearTimeout(timer))
-  }, [])
+  }, [seeker])
 
-  const me = state?.seekers?.find((s) => s.id === SEEKER && s.lat != null) || null
-  const target = state?.targets?.find((t) => t && t.seekerId === SEEKER && t.name) || null
+  const me = state?.seekers?.find((s) => s.id === seeker && s.lat != null) || null
+  const target = state?.targets?.find((t) => t && t.seekerId === seeker && t.name) || null
   const beacons = (state?.beacons || []).filter((b) => b.reading?.estimate)
   const sought = target ? beacons.find((b) => b.id === target.beaconId) : null
   const soughtAt = sought?.reading?.estimate || null
@@ -144,10 +147,10 @@ export default function MapView({ onBack }) {
           <text x="40" y="556">{bar} M</text>
         </g>
       </svg>
-      <button ref={back} className="pill ghost" onClick={onBack}>
+      <button ref={back} className="pill ghost" onClick={onBack} style={mirror ? HIDDEN : undefined} aria-hidden={mirror || undefined}>
         Back
       </button>
-      <LensAlert alert={alert} seeker={SEEKER} />
+      <LensAlert alert={alert} seeker={seeker} />
     </section>
   )
 }
