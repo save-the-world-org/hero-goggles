@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -17,6 +18,16 @@ export default defineConfig({
       'react-dom': 'preact/compat',
       'react/jsx-runtime': 'preact/jsx-runtime',
       'react/jsx-dev-runtime': 'preact/jsx-dev-runtime',
+    },
+  },
+  // Two pages: index.html is the glasses app and stays tiny; live/index.html (/live/) is Jared's live map, the
+  // registry and the influencer's own page, for phones and laptops. Only the live page loads MapLibre.
+  build: {
+    rollupOptions: {
+      input: {
+        main: fileURLToPath(new URL('./index.html', import.meta.url)),
+        live: fileURLToPath(new URL('./live/index.html', import.meta.url)),
+      },
     },
   },
 })
