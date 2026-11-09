@@ -3,6 +3,7 @@ import { Avatar } from './Avatar.jsx'
 import { CopyButton } from './Agents.jsx'
 import { api, getWriteKey, setWriteKey, store } from './api.js'
 import { Wordmark } from './MapPage.jsx'
+import { Credits } from './Sponsors.jsx'
 
 // The registry: influencers and beacons, each beacon mapped to an influencer or to nobody. Writes send the
 // write key when one is set (the API asks for it only when it has WRITE_KEY).
@@ -210,6 +211,7 @@ export default function Registry({ live }) {
           ))}
         </section>
       </div>
+      <Credits />
     </div>
   )
 }

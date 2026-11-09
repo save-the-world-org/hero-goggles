@@ -586,3 +586,56 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .radar-meta { font-size: 14px; }
   .radar-badge { font-size: 12.5px; padding: 2px 9px; letter-spacing: 0.04em; white-space: normal; }
 }
+
+/* ---------- the hackathon's sponsors: their logos where their product does the work, and the thanks ---------- */
+
+.sp-logo { display: inline-flex; align-items: center; flex: none; height: 1.25em; vertical-align: middle; }
+.sp-logo img { display: block; height: 100%; width: auto; }
+.sp-logo.chip { padding: 0.18em 0.45em; border-radius: 6px; background: var(--light); }
+.int-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.int-name .sp-logo { height: 24px; }
+.int-name .sp-logo.wide { height: 20px; }
+.int-name .sp-logo.chip { height: 26px; }
+.int-by { font-size: 13px; font-weight: 600; color: var(--muted); }
+.sp-by { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.sp-by .sp-logo { height: 15px; }
+.radar-head .sp-logo { height: 1.8em; }
+.radar-badge .sp-logo, .alert-via .sp-logo { height: 1.3em; margin-right: 4px; vertical-align: -0.3em; }
+.sp-credits { display: grid; gap: 10px; margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); text-align: center; }
+.sp-credits p { margin: 0; font-size: 13px; }
+.sp-credits a { color: var(--light); font-weight: 650; }
+.sp-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 18px; }
+.sp-row .sp-logo { height: 22px; }
+.sp-row .sp-wemakedevs { height: 30px; }
+.sp-row .sp-radar, .sp-row .sp-elasticsearch { height: 26px; }
+.page > .sp-credits { margin: 32px 0 16px; }
+/* On the map, the thanks sits in the bottom right corner on a wide screen; on a phone it is in the Integrations panel. */
+.sp-credits.corner { display: none; }
+@media (min-width: 1280px) {
+  .sp-credits.corner {
+    display: grid;
+    position: absolute;
+    right: var(--gutter);
+    bottom: var(--gutter);
+    width: 330px;
+    margin: 0;
+    padding: 12px 14px;
+    gap: 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 3;
+  }
+  .sp-credits.corner p { font-size: 12px; line-height: 1.35; }
+  .sp-credits.corner .sp-row { gap: 8px 12px; }
+  .sp-credits.corner .sp-row .sp-logo { height: 17px; }
+  .sp-credits.corner .sp-row .sp-wemakedevs { height: 24px; }
+  .sp-credits.corner .sp-row .sp-radar, .sp-credits.corner .sp-row .sp-elasticsearch { height: 20px; }
+  .mappage .panel.integrations { max-height: calc(100% - 86px - var(--radar-h, 0px) - 230px); }
+}
+.sp-row .sp-openai { height: 17px; }
+.sp-row .sp-darkshift { height: 30px; }
+.sp-credits.corner .sp-row .sp-openai { height: 14px; }
+.sp-credits.corner .sp-row .sp-darkshift { height: 24px; }

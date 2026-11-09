@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { api } from './api.js'
+import { Credits, Logo, SearchBy } from './Sponsors.jsx'
 
 const GITAR_RULE = 'https://github.com/save-the-world-org/hero-goggles/blob/main/.gitar/rules/instrumentation.md'
 const RADAR_FRESH_MS = 10000
@@ -60,7 +61,10 @@ export default function Integrations({ info, onClose }) {
         <li>
           <Dot on={radarOn} />
           <div>
-            <strong>Skyhook Radar</strong>
+            <strong className="int-name">
+              <Logo name="radar" alt="" />
+              Skyhook Radar
+            </strong>
             <span>{info?.radar?.mirrored ?? 0} alerts mirrored to the cluster's event timeline</span>
             {confirmed != null && <span>{`${confirmed} alerts confirmed${latency}`}</span>}
             {said(info?.radar?.lastEvent) && <span className="int-last">{said(info.radar.lastEvent)}</span>}
@@ -69,7 +73,9 @@ export default function Integrations({ info, onClose }) {
         <li>
           <Dot on={info?.telemetry ? !!info.telemetry.on : undefined} />
           <div>
-            <strong>Dash0</strong>
+            <strong className="int-name">
+              <Logo name="dash0" className="wide" />
+            </strong>
             <span>Traces and metrics from influence-api</span>
             <a href="https://app.dash0.com" target="_blank" rel="noreferrer">
               Open Dash0
@@ -79,14 +85,22 @@ export default function Integrations({ info, onClose }) {
         <li>
           <Dot on={info?.elasticsearch ? !!info.elasticsearch.on : undefined} />
           <div>
-            <strong>Elasticsearch</strong>
+            <strong className="int-name">
+              <Logo name="elasticsearch" alt="" />
+              Elasticsearch
+            </strong>
             <Search />
+            <SearchBy />
           </div>
         </li>
         <li>
           <Dot on={true} />
           <div>
-            <strong>Gitar</strong>
+            <strong className="int-name">
+              <Logo name="gitar" className="wide" />
+              <span className="int-by">by</span>
+              <Logo name="sonar" className="wide" />
+            </strong>
             <span>Reviews every pull request against the instrumentation rule</span>
             <a href={GITAR_RULE} target="_blank" rel="noreferrer">
               The rule
@@ -102,6 +116,7 @@ export default function Integrations({ info, onClose }) {
           </div>
         </li>
       </ul>
+      <Credits />
     </aside>
   )
 }

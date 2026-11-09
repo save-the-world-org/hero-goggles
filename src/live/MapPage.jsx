@@ -9,6 +9,7 @@ import Integrations, { radarLive, useIntegrations } from './Integrations.jsx'
 import Lens from './Lens.jsx'
 import LiveMap from './LiveMap.jsx'
 import Minimap from './Minimap.jsx'
+import { Credits } from './Sponsors.jsx'
 import { registerWebMCP } from './webmcp.js'
 
 export function Wordmark() {
@@ -87,6 +88,7 @@ export default function MapPage({ live }) {
       <Lens seeker={mySeeker} live={connected} frameAt={state?.seekers?.find((s) => s.id === mySeeker)?.frameAt || null} />
       {agents && <Agents webmcp={webmcp} onClose={() => setAgents(false)} />}
       {integrations && <Integrations info={info} onClose={() => showIntegrations(false)} />}
+      <Credits corner />
       <AlertBanner alert={alerts.banner} influencers={state?.influencers} onDismiss={alerts.dismiss} />
       <FindBar state={state} me={me} mySeeker={mySeeker}>
         <AlertsList list={alerts.list} influencers={state?.influencers} />

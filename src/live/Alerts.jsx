@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Logo } from './Sponsors.jsx'
 import { DEMO_ALERTS, DEMO_CONFIRM_MS, alertBig, alertTone, confirmedIn, demoAlert, demoConfirm, isRadar } from '../alerts.js'
 import { emitAlert, listAlerts, onAlert } from './api.js'
 
@@ -77,7 +78,14 @@ export function AlertBanner({ alert, influencers, onDismiss }) {
       <span className="alert-dot" />
       <strong className="alert-big">{alertBig(alert)}</strong>
       <span className="alert-msg">{alert.message || alert.name}</span>
-      <span className={`alert-via${isRadar(alert) ? ' on' : ''}`}>{isRadar(alert) ? 'via Skyhook Radar' : 'Detected'}</span>
+      <span className={`alert-via${isRadar(alert) ? ' on' : ''}`}>{isRadar(alert) ? (
+          <>
+            <Logo name="radar" alt="" />
+            via Skyhook Radar
+          </>
+        ) : (
+          'Detected'
+        )}</span>
     </div>
   )
 }
@@ -116,7 +124,12 @@ const KIND = { closer: 'Closer', farther: 'Farther', found: 'Found', lost: 'Lost
 function RadarBadge({ alert: a }) {
   if (!isRadar(a)) return <span className="radar-badge">Detected</span>
   const took = confirmedIn(a)
-  return <span className="radar-badge on">{['Radar', a.radarReason, took ? `confirmed in ${took}` : 'confirmed'].filter(Boolean).join(' · ')}</span>
+  return (
+    <span className="radar-badge on">
+      <Logo name="radar" alt="" />
+      {['Radar', a.radarReason, took ? `confirmed in ${took}` : 'confirmed'].filter(Boolean).join(' · ')}
+    </span>
+  )
 }
 
 // Front and centre under the top bar, always there: this page's seeker's latest three alerts, big, the newest pulsing,
@@ -127,6 +140,7 @@ export function RadarStrip({ list, influencers, radarOn }) {
     <section className="radar-strip" aria-label="Skyhook Radar live alerts">
       <header className="radar-head">
         <span className={`int-dot${radarOn === true ? ' on' : radarOn === false ? ' off' : ''}`} aria-label={radarOn ? 'Radar on' : 'Radar not seen'} />
+        <Logo name="radar" alt="" />
         SKYHOOK RADAR · LIVE ALERTS
       </header>
       {top.length === 0 ? (
