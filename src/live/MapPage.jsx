@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { getSeekerId, store } from './api.js'
-import { AlertBanner, AlertsList, useSeekerAlerts } from './Alerts.jsx'
+import { AlertBanner, AlertsList, RadarStrip, useSeekerAlerts } from './Alerts.jsx'
 import { useMyDevice } from './device.js'
 import { distanceM } from './geo.js'
 import Agents from './Agents.jsx'
 import FindBar from './FindBar.jsx'
-import Integrations from './Integrations.jsx'
+import Integrations, { radarLive, useIntegrations } from './Integrations.jsx'
 import LiveMap from './LiveMap.jsx'
 import Minimap from './Minimap.jsx'
 import { registerWebMCP } from './webmcp.js'
@@ -41,6 +41,7 @@ export default function MapPage({ live }) {
   const [integrations, setIntegrations] = useState(integrationsAtStart)
   const showIntegrations = (on) => (setIntegrations(on), store.set(INTEGRATIONS_KEY, on ? 'open' : 'closed'))
   const alerts = useSeekerAlerts(mySeeker, state?.influencers)
+  const info = useIntegrations()
   const [webmcp] = useState(registerWebMCP)
   const [focus, setFocus] = useState(null)
   const flown = useRef(false)
@@ -80,9 +81,10 @@ export default function MapPage({ live }) {
           </a>
         </nav>
       </header>
+      <RadarStrip list={alerts.list} influencers={state?.influencers} radarOn={radarLive(info)} />
       <Minimap state={state} me={me} mySeeker={mySeeker} />
       {agents && <Agents webmcp={webmcp} onClose={() => setAgents(false)} />}
-      {integrations && <Integrations onClose={() => showIntegrations(false)} />}
+      {integrations && <Integrations info={info} onClose={() => showIntegrations(false)} />}
       <AlertBanner alert={alerts.banner} influencers={state?.influencers} onDismiss={alerts.dismiss} />
       <FindBar state={state} me={me} mySeeker={mySeeker}>
         <AlertsList list={alerts.list} influencers={state?.influencers} />

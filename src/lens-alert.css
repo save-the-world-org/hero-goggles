@@ -33,6 +33,24 @@
 .lens-alert.found { --tone: #6dffa8; }
 .lens-alert.farther { --tone: #ffb020; }
 .lens-alert.lost { --tone: var(--red); }
+.lens-alert-eyebrow {
+  position: relative;
+  font-family: 'Syncopate', sans-serif;
+  font-weight: 700;
+  font-size: calc(3 * var(--u));
+  line-height: 1;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+}
+/* Confirmed by Skyhook Radar: a thin outline in Radar's colour, Darkshift Green, inside the band. */
+.lens-alert.radar::after {
+  content: '';
+  position: absolute;
+  inset: calc(1.6 * var(--u));
+  border: calc(0.4 * var(--u)) solid #3da992;
+  border-radius: calc(1.5 * var(--u));
+}
+.lens-alert.radar .lens-alert-eyebrow { color: #3da992; }
 .lens-alert-big {
   position: relative;
   font-family: 'Syncopate', sans-serif;
