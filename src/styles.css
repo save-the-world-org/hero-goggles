@@ -140,3 +140,6 @@ button {
 .logo { width: calc(40 * var(--u)); margin-top: calc(2 * var(--u)); opacity: 0.85; }
 .logo.hero { width: calc(26 * var(--u)); opacity: 1; }
 .version { margin: 0; font-size: calc(3.4 * var(--u)); color: var(--muted); letter-spacing: 0.04em; }
+
+.splash { align-items: center; justify-content: center; gap: calc(4 * var(--u)); text-align: center; }
+.splash-hero { width: calc(56 * var(--u)); }

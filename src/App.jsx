@@ -15,7 +15,7 @@ const CARDS = [
 ]
 
 export default function App() {
-  const [view, setView] = useState('home')
+  const [view, setView] = useState('splash')
   const lastCard = useRef('find')
 
   useEffect(() => {
@@ -31,8 +31,18 @@ export default function App() {
   }
   const back = () => history.back()
 
+  // The splash: the hero in this release's cape for a moment, then home (any key goes there at once).
+  useEffect(() => {
+    if (view !== 'splash') return
+    const go = () => setView('home')
+    const t = setTimeout(go, 1400)
+    window.addEventListener('keydown', go, { once: true })
+    return () => (clearTimeout(t), window.removeEventListener('keydown', go))
+  }, [view])
+
   return (
     <main className="frame">
+      {view === 'splash' && <Splash />}
       {view === 'home' && <Home onOpen={open} focusId={lastCard.current} />}
       {view === 'find' && <Find onBack={back} />}
       {view === 'hello' && <Hello onBack={back} />}
@@ -115,14 +125,23 @@ function Now({ onBack }) {
   )
 }
 
+function Splash() {
+  return (
+    <section className="screen splash" aria-label="Hero Goggles">
+      <img className="splash-hero" src="/brand/hero-goggles-color.svg" alt="" />
+      <h1 className="wordmark">Hero<br />Goggles</h1>
+    </section>
+  )
+}
+
 function About({ onBack }) {
   return (
     <Screen title="About" onBack={onBack}>
       <p className="muted">
         Hero Goggles finds the influencer you are looking for and shows how close you are. Built and shipped by Infrared.
       </p>
-      <img className="logo hero" src="/brand/hero-goggles-color.svg" alt="The Darkshift goat in a red cape and mask" />
-      <p className="version">Version {__APP_VERSION__}</p>
+      <img className="logo hero" src="/brand/hero-goggles-color.svg" alt={`The Darkshift goat in a ${__CAPE__.name.toLowerCase()} cape and mask`} />
+      <p className="version">Version {__APP_VERSION__} · <span style={{ color: __CAPE__.hex }}>{__CAPE__.name}</span> cape</p>
     </Screen>
   )
 }
