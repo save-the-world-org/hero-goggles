@@ -6,6 +6,7 @@ import { distanceM } from './geo.js'
 import Agents from './Agents.jsx'
 import FindBar from './FindBar.jsx'
 import Integrations, { radarLive, useIntegrations } from './Integrations.jsx'
+import Lens from './Lens.jsx'
 import LiveMap from './LiveMap.jsx'
 import Minimap from './Minimap.jsx'
 import { registerWebMCP } from './webmcp.js'
@@ -83,6 +84,7 @@ export default function MapPage({ live }) {
       </header>
       <RadarStrip list={alerts.list} influencers={state?.influencers} radarOn={radarLive(info)} />
       <Minimap state={state} me={me} mySeeker={mySeeker} />
+      <Lens seeker={mySeeker} live={connected} />
       {agents && <Agents webmcp={webmcp} onClose={() => setAgents(false)} />}
       {integrations && <Integrations info={info} onClose={() => showIntegrations(false)} />}
       <AlertBanner alert={alerts.banner} influencers={state?.influencers} onDismiss={alerts.dismiss} />
