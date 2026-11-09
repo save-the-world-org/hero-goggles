@@ -6,9 +6,9 @@ const RADAR_FRESH_MS = 10000
 const VENUE_TZ = 'America/Denver' // the Salt Palace
 
 // What influence-api is wired to: {elasticsearch: {on, url}, telemetry: {on, endpoint},
-// radar: {lastSeen, mirrored, lastEvent}, alerts: {count, last}}, read every 5 s. While the API answers 404 the rows
-// stay grey and the links still work.
-function useIntegrations() {
+// radar: {lastSeen, mirrored, lastEvent, confirmed, lastConfirmedAt, latencyMs}, alerts: {count, last}}, read every 5 s
+// by the map page for this panel and Radar's strip. While the API answers 404 the rows stay grey and the links work.
+export function useIntegrations() {
   const [info, setInfo] = useState(null)
   useEffect(() => {
     let alive = true
@@ -35,11 +35,18 @@ function Dot({ on }) {
   return <span className={`int-dot${on === true ? ' on' : on === false ? ' off' : ''}`} aria-label={on === true ? 'On' : on === false ? 'Off' : 'Unknown'} />
 }
 
-export default function Integrations({ onClose }) {
-  const info = useIntegrations()
-  const ls = info?.radar?.lastSeen
-  const radarSeen = typeof ls === 'number' ? (ls < 1e12 ? ls * 1000 : ls) : Date.parse(ls)
-  const radarOn = info?.radar ? Number.isFinite(radarSeen) && Date.now() - radarSeen < RADAR_FRESH_MS : undefined
+// Radar is on while it was seen, or confirmed an alert, in the last 10 s; undefined while the API says nothing of it.
+const ms = (t) => (typeof t === 'number' ? (t < 1e12 ? t * 1000 : t) : Date.parse(t))
+export function radarLive(info) {
+  if (!info?.radar) return undefined
+  const last = Math.max(...[info.radar.lastSeen, info.radar.lastConfirmedAt].map(ms).filter(Number.isFinite))
+  return Number.isFinite(last) && Date.now() - last < RADAR_FRESH_MS
+}
+
+export default function Integrations({ info, onClose }) {
+  const radarOn = radarLive(info)
+  const confirmed = info?.radar?.confirmed
+  const latency = Number.isFinite(info?.radar?.latencyMs) ? `, ${(info.radar.latencyMs / 1000).toFixed(1)} s to confirm` : ''
   return (
     <aside className="panel integrations" aria-label="Integrations">
       <header>
@@ -55,6 +62,7 @@ export default function Integrations({ onClose }) {
           <div>
             <strong>Skyhook Radar</strong>
             <span>{info?.radar?.mirrored ?? 0} alerts mirrored to the cluster's event timeline</span>
+            {confirmed != null && <span>{`${confirmed} alerts confirmed${latency}`}</span>}
             {said(info?.radar?.lastEvent) && <span className="int-last">{said(info.radar.lastEvent)}</span>}
           </div>
         </li>
