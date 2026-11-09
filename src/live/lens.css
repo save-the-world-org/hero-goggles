@@ -1,0 +1,110 @@
+/* The Lens: what the glasses show, in a square black frame with a faint teal rim. On a phone it sits under the Radar
+   strip, beside the minimap; from 720 px it takes the bottom-left corner, about 300 px across on a laptop, kept clear of
+   the find bar and the Radar strip. */
+.lens-mirror {
+  --lens: 168px;
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 124px + var(--radar-h, 0px));
+  left: var(--gutter);
+  width: calc(var(--lens) + 18px);
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 16px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  z-index: 2;
+}
+@media (min-width: 720px) {
+  .lens-mirror {
+    --lens: max(180px, min(300px, calc((100vw - 600px) / 2 - 2 * var(--gutter) - 20px), calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 86px - var(--radar-h, 0px) - 2 * var(--gutter) - 72px)));
+    top: auto;
+    bottom: calc(env(safe-area-inset-bottom) + var(--gutter));
+  }
+}
+.lens-head { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.lens-eyebrow { font: 700 10px/1 'Syncopate', sans-serif; letter-spacing: 0.22em; color: var(--green); }
+.lens-sub { min-width: 0; font-size: 12px; line-height: 1; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lens-bar { display: flex; align-items: center; gap: 6px; }
+.lens-tabs { display: flex; gap: 4px; }
+.lens-tab {
+  min-height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  font-size: 11.5px;
+  font-weight: 650;
+  line-height: 1;
+  color: var(--muted);
+}
+.lens-tab.showing { border-color: var(--green); color: var(--light); }
+.lens-tab.on { background: var(--green); border-color: var(--green); color: #000; }
+.lens-live { margin-left: auto; flex: none; font: 700 8.5px/1 'Syncopate', sans-serif; letter-spacing: 0.2em; }
+.lens-frame {
+  position: relative;
+  width: var(--lens);
+  height: var(--lens);
+  overflow: hidden;
+  border-radius: 14px;
+  background: #000;
+  box-shadow: 0 0 0 1.5px rgba(27, 82, 88, 0.95), 0 0 18px rgba(61, 169, 146, 0.18);
+}
+@media (max-width: 719px) {
+  .lens-sub { display: none; }
+}
+
+/* The stage is the lens itself: 600 x 600 at the glasses' unit (styles.css's --u is 6px there), scaled to the frame by
+   Lens.jsx. It is a picture, not a control. */
+.lens-stage {
+  --u: 6px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 600px;
+  height: 600px;
+  transform-origin: 0 0;
+  color: var(--light);
+  font: 16px/normal system-ui, -apple-system, 'Roboto', sans-serif;
+  text-align: left;
+  pointer-events: none;
+}
+/* styles.css's rules for a screen, kept to the stage so the rest of /live/ is untouched, and at their own specificity so
+   find.css, map.css and lens-alert.css win over them exactly as they do on the glasses. Keep in step with styles.css. */
+.lens-stage > .screen { position: relative; inset: auto; }
+:where(.lens-stage) .screen {
+  width: 600px;
+  height: 600px;
+  padding: calc(8 * var(--u));
+  display: flex;
+  flex-direction: column;
+}
+:where(.lens-stage) .title {
+  margin: calc(1.5 * var(--u)) 0 0;
+  font-family: 'Syncopate', sans-serif;
+  font-weight: 700;
+  font-size: calc(7 * var(--u));
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+:where(.lens-stage) .detail .body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(3 * var(--u));
+}
+:where(.lens-stage) .muted { margin: 0; font-size: calc(4.2 * var(--u)); color: var(--muted); line-height: 1.35; }
+:where(.lens-stage) .pill {
+  align-self: flex-start;
+  padding: calc(2.2 * var(--u)) calc(6 * var(--u));
+  font-size: calc(4.2 * var(--u));
+  font-weight: 600;
+  background: transparent;
+  border: calc(0.4 * var(--u)) solid var(--green);
+  border-radius: 999px;
+}
+:where(.lens-stage) .pill.ghost { border-color: rgba(217, 245, 243, 0.28); }
