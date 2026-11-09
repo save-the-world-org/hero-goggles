@@ -84,7 +84,7 @@ export default function MapPage({ live }) {
       </header>
       <RadarStrip list={alerts.list} influencers={state?.influencers} radarOn={radarLive(info)} />
       <Minimap state={state} me={me} mySeeker={mySeeker} />
-      <Lens seeker={mySeeker} live={connected} />
+      <Lens seeker={mySeeker} live={connected} frameAt={state?.seekers?.find((s) => s.id === mySeeker)?.frameAt || null} />
       {agents && <Agents webmcp={webmcp} onClose={() => setAgents(false)} />}
       {integrations && <Integrations info={info} onClose={() => showIntegrations(false)} />}
       <AlertBanner alert={alerts.banner} influencers={state?.influencers} onDismiss={alerts.dismiss} />

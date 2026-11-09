@@ -62,6 +62,9 @@ export async function mcpTool(name, args = {}) {
 const alertListeners = new Set()
 export const onAlert = (fn) => (alertListeners.add(fn), () => alertListeners.delete(fn))
 export const emitAlert = (a) => alertListeners.forEach((fn) => fn(a))
+// The glasses' camera: the stream's `event: frame` ({seekerId, at}, never the bytes) goes to whoever listens here.
+const frameListeners = new Set()
+export const onFrame = (fn) => (frameListeners.add(fn), () => frameListeners.delete(fn))
 // A seeker's latest alerts, newest first. An API without alerts answers 404; callers treat that as none.
 export const listAlerts = async (seeker = getSeekerId(), limit = 20) => {
   const r = await api(`/api/alerts?seeker=${encodeURIComponent(seeker)}&limit=${limit}`)
@@ -97,6 +100,15 @@ export function useLiveState() {
         return /* a torn frame */
       }
       if (a?.id) emitAlert(a)
+    })
+    es.addEventListener('frame', (e) => {
+      let f = null
+      try {
+        f = JSON.parse(e.data)
+      } catch {
+        return /* a torn frame */
+      }
+      if (f?.seekerId) frameListeners.forEach((fn) => fn(f))
     })
     es.onerror = () => setLive(false)
     return () => {

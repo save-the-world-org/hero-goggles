@@ -28,7 +28,7 @@
 .lens-eyebrow { font: 700 10px/1 'Syncopate', sans-serif; letter-spacing: 0.22em; color: var(--green); }
 .lens-sub { min-width: 0; font-size: 12px; line-height: 1; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .lens-bar { display: flex; align-items: center; gap: 6px; }
-.lens-tabs { display: flex; gap: 4px; }
+.lens-tabs { display: flex; flex-wrap: wrap; gap: 4px; }
 .lens-tab {
   min-height: 22px;
   padding: 0 8px;
@@ -108,3 +108,21 @@
   border-radius: 999px;
 }
 :where(.lens-stage) .pill.ghost { border-color: rgba(217, 245, 243, 0.28); }
+
+/* Camera: the glasses' own camera, relayed by the phone, fills the lens; the HUD draws on top as the wearer sees it,
+   Map dimmed so the room shows through. Without the write key, only the line asking for it, never the frame. */
+.lens-cam { position: absolute; inset: 0; background: center / cover no-repeat #000; box-shadow: inset 0 0 0 999px rgba(0, 0, 0, 0.2); }
+.lens-stage.dim { opacity: 0.6; }
+.lens-cam-note {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  font-size: 10px;
+  line-height: 1.3;
+  color: var(--light);
+  white-space: nowrap;
+}
+.lens-cam-msg { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; text-align: center; font-size: 12.5px; line-height: 1.4; color: var(--light); }
