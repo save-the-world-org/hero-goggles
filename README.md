@@ -36,3 +36,7 @@ The glasses run Web Apps from an HTTPS address, so it works the same whether the
 
 `public/brand/hero-goggles.svg` is the Darkshift goat from the brand kit, its path unchanged, in a cape and an eye
 mask, one colour, the cape and mask set apart by cut lines (the glasses want a one-colour mask).
+`public/brand/hero-goggles-color.svg` is the same in colour, the cape and mask Darkshift Red (`#FF4549`), for the
+About screen and the browser's tab.
+
+About shows the version from `package.json`, which each Infrared release sets.
