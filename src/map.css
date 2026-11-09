@@ -1,0 +1,34 @@
+/* Map, in the lens: thin light lines on black (black is see-through), the hero bright, everything else quiet. */
+.map .title { font-size: calc(5 * var(--u)); }
+.map-words {
+  margin: calc(1 * var(--u)) 0 0;
+  font-size: calc(4.6 * var(--u));
+  font-weight: 600;
+  color: var(--light);
+}
+.map-lost { color: var(--red); }
+.map-svg {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  margin: calc(1 * var(--u)) 0 calc(2 * var(--u));
+}
+.map-building { fill: none; stroke: var(--teal); stroke-width: 3; stroke-linejoin: round; }
+.map-line { stroke: var(--green); stroke-width: 3; stroke-dasharray: 10 8; }
+.map-label { fill: var(--light); font-size: 24px; font-weight: 600; }
+.map-other .map-label { fill: var(--muted); font-size: 20px; }
+.map-you { fill: var(--light); stroke: var(--green); stroke-width: 4; }
+.map-heading { fill: var(--green); opacity: 0.85; }
+.map-pulse {
+  fill: none;
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: map-pulse 1.6s ease-out infinite;
+}
+@keyframes map-pulse {
+  from { transform: scale(0.6); opacity: 0.9; }
+  to { transform: scale(2.6); opacity: 0; }
+}
+.map-scale line { stroke: var(--muted); stroke-width: 3; }
+.map-scale text { fill: var(--muted); font-size: 18px; }

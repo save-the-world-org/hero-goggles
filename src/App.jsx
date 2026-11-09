@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Find from './Find.jsx'
+import MapView from './MapView.jsx'
 
 // Ray-Ban Display gives a Web App arrow keys and Enter from the touchpad and the
 // Neural Band. The browser moves focus between real buttons and Enter fires a
@@ -9,6 +10,7 @@ import Find from './Find.jsx'
 
 const CARDS = [
   { id: 'find', title: 'Find', hint: 'Who you seek' },
+  { id: 'map', title: 'Map', hint: 'Where they are' },
   { id: 'hello', title: 'Hello', hint: 'Say hi' },
   { id: 'now', title: 'Now', hint: 'Time and date' },
   { id: 'about', title: 'About', hint: 'What this is' },
@@ -31,6 +33,23 @@ export default function App() {
   }
   const back = () => history.back()
 
+  // Swipes, which reach a Web App as ArrowLeft and ArrowRight, move along list, Map, Find. The list is one column and
+  // Map and Find hold a single button, so left and right move no focus there. Enter is never handled here. Map and Find
+  // replace each other's history entry, so the one entry a card pushes still brings Back home.
+  useEffect(() => {
+    const swipe = (e) => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+      const right = e.key === 'ArrowRight'
+      const go = (id) => (e.preventDefault(), history.replaceState({ view: id }, ''), (lastCard.current = id), setView(id))
+      if (view === 'home' && right) (e.preventDefault(), open('map'))
+      else if (view === 'map' && !right) (e.preventDefault(), back())
+      else if (view === 'map' && right) go('find')
+      else if (view === 'find' && !right) go('map')
+    }
+    window.addEventListener('keydown', swipe)
+    return () => window.removeEventListener('keydown', swipe)
+  }, [view])
+
   // The splash: the hero in this release's cape for a moment, then home (any key goes there at once).
   useEffect(() => {
     if (view !== 'splash') return
@@ -45,6 +64,7 @@ export default function App() {
       {view === 'splash' && <Splash />}
       {view === 'home' && <Home onOpen={open} focusId={lastCard.current} />}
       {view === 'find' && <Find onBack={back} />}
+      {view === 'map' && <MapView onBack={back} />}
       {view === 'hello' && <Hello onBack={back} />}
       {view === 'now' && <Now onBack={back} />}
       {view === 'about' && <About onBack={back} />}

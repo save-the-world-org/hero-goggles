@@ -21,6 +21,9 @@ The glasses run Web Apps from an HTTPS address, so it works the same whether the
    Each person adds their own seeker: `https://hero-goggles.darkshift.cloud/?seeker=<id>` (e.g. `?seeker=john`); without it, Find uses the build's seeker (`VITE_SEEKER`, default `phone`).
 3. Open Hero Goggles from the glasses' apps.
 
+The list's Map card shows the venue's outline, you, the hero you seek and the other beacons, to scale. Swipe left and
+right to move along list, Map and Find; Back comes home from either.
+
 ## Building for the display
 
 - 600 x 600, additive: black is see-through, so keep the ground black and draw light.
