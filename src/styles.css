@@ -73,7 +73,7 @@ html, body, #root {
 .cards {
   margin-top: auto;
   display: grid;
-  gap: calc(2.5 * var(--u));
+  gap: calc(2 * var(--u));
 }
 
 button {
@@ -89,7 +89,7 @@ button {
   align-items: baseline;
   justify-content: space-between;
   width: 100%;
-  padding: calc(3 * var(--u)) calc(4 * var(--u));
+  padding: calc(2.2 * var(--u)) calc(4 * var(--u));
   background: transparent;
   border: calc(0.4 * var(--u)) solid rgba(217, 245, 243, 0.28);
   border-radius: calc(3 * var(--u));
