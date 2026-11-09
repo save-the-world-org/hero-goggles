@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "name": "Hero Goggles",
+  "description": "How close you are to the influencer you are looking for.",
+  "appearance": {
+    "theme_color": "#3DA992",
+    "icon": {
+      "src": "../brand/hero-goggles.svg"
+    }
+  }
+}
