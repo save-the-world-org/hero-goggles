@@ -138,4 +138,5 @@ button {
 .pill.ghost:focus { background: var(--light); border-color: var(--light); }
 
 .logo { width: calc(40 * var(--u)); margin-top: calc(2 * var(--u)); opacity: 0.85; }
-.logo.hero { width: calc(26 * var(--u)); }
+.logo.hero { width: calc(26 * var(--u)); opacity: 1; }
+.version { margin: 0; font-size: calc(3.4 * var(--u)); color: var(--muted); letter-spacing: 0.04em; }

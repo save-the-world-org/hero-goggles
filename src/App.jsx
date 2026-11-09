@@ -118,7 +118,8 @@ function About({ onBack }) {
       <p className="muted">
         Hero Goggles finds the influencer you are looking for and shows how close you are. Built and shipped by Infrared.
       </p>
-      <img className="logo hero" src="/brand/hero-goggles.svg" alt="The Darkshift goat in a cape and goggles" />
+      <img className="logo hero" src="/brand/hero-goggles-color.svg" alt="The Darkshift goat in a red cape and mask" />
+      <p className="version">Version {__APP_VERSION__}</p>
     </Screen>
   )
 }
