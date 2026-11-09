@@ -560,7 +560,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .radar-alert.closer .radar-big { color: var(--light); }
 .radar-who { grid-area: who; min-width: 0; font-size: 15px; font-weight: 750; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .radar-meta { grid-area: meta; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.radar-badge { grid-area: badge; justify-self: start; max-width: 100%; padding: 1px 7px; border-radius: 999px; border: 1px dashed var(--line-strong); font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; color: var(--muted); opacity: 0.75; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.radar-badge { grid-area: badge; justify-self: start; max-width: 100%; padding: 1px 7px; border-radius: 999px; border: 1px dashed var(--line-strong); font-size: 10.5px; font-weight: 700; letter-spacing: 0; color: var(--muted); opacity: 0.75; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .radar-badge.on { border: 1px solid #3da992; background: rgba(61, 169, 146, 0.22); color: var(--light); opacity: 1; animation: radar-confirm 600ms ease-out; }
 @keyframes radar-pulse {
   0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--tone) 55%, transparent); }
@@ -584,5 +584,5 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .radar-big { font-size: clamp(28px, 3.4vw, 46px); }
   .radar-who { font-size: clamp(17px, 1.7vw, 22px); }
   .radar-meta { font-size: 14px; }
-  .radar-badge { font-size: 12.5px; padding: 2px 9px; white-space: normal; }
+  .radar-badge { font-size: 12.5px; padding: 2px 9px; letter-spacing: 0.04em; white-space: normal; }
 }
