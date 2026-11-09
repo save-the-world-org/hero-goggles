@@ -42,6 +42,10 @@ About screen and the browser's tab.
 
 About shows the version from `package.json`, which each Infrared release sets.
 
+The cape changes colour with every release: `vite.config.js` picks it from `CAPES` by the version and, after the
+build, puts it on `dist/brand/hero-goggles-color.svg` (the splash, About and the tabs) and in the manifest's
+`theme_color`, which Meta uses to tint the launcher icon (a one-colour mask, on a Darkshift Dark gradient).
+
 ## Test Find without the phone
 
 `scripts/fake-reading.sh <seeker> [distance] [azimuth]` points that seeker at Kelsey and posts a reading each second for
