@@ -1,8 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { api, getSeekerId, store } from './api.js'
+import { api, store } from './api.js'
+
+// Who this browser posts its position as: only a seeker the address names (?seeker=<id>) or one this browser chose.
+// The page is public and the seeker it shows by default is the phone's, so a visitor's browser keeps its position to
+// itself, on its own map: posting it by default moved the phone's dot to wherever a visitor was.
+const postsAs = () => new URLSearchParams(location.search).get('seeker') || store.get('influence.seeker', '') || ''
 
 // This phone as a seeker: its GPS position from watchPosition and its compass heading from DeviceOrientation,
-// posted to /api/seekers/<id> at most once a second. iOS asks for both from a tap, so start() runs from one.
+// posted to /api/seekers/<id> at most once a second when postsAs() names one. iOS asks for both from a tap, so
+// start() runs from one.
 export function useMyDevice() {
   const [pos, setPos] = useState(null) // { lat, lon, accuracy }
   const [heading, setHeading] = useState(null)
@@ -12,14 +18,15 @@ export function useMyDevice() {
 
   const post = useCallback(() => {
     const l = last.current
-    if (!l.pos) return
+    const seeker = postsAs()
+    if (!l.pos || !seeker) return
     const wait = 1000 - (Date.now() - l.sent)
     if (wait > 0) {
       if (!l.timer) l.timer = setTimeout(() => ((l.timer = null), post()), wait)
       return
     }
     l.sent = Date.now()
-    api(`/api/seekers/${encodeURIComponent(getSeekerId())}`, {
+    api(`/api/seekers/${encodeURIComponent(seeker)}`, {
       method: 'POST',
       body: { ...l.pos, heading: l.heading, name: 'This phone' },
       key: '', // seekers need no key
